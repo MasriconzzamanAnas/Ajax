@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
+        <title>Ajax prectise</title>
+    </head>
+    <body>
+        <div class="continer">
+            <h1>Ajax prectise</h1>
+            <a href="crateProduct.html" class="button">add new product</a>
+            <div class="table">
+                <div class="row">
+                    <div class="column">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Img</th>
+                                    <th>Product Name</th>
+                                    <th>Product Code</th>
+                                    <th>UnitPrice</th>
+                                    <th>Qty</th>
+                                    <th>TotalPrice</th>
+                                    <th>Delete</th>
+                                    <th>Edit</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script>
+            async function getproduct(){
+                let url = 'https://crud.teamrabbil.com/api/v1/ReadProduct'
+                let response = await axios.get(url);
+                let product = response.data.data;
+                product.forEach(item=>{
+                    document.getElementById("tableBody").innerHTML +=(`
+                        <tr>
+                            <td><img src="${item.Img}" alt="Loding..."></td>
+                            <td>${item.ProductName}</td>
+                            <td>${item.ProductCode}</td>
+                            <td>${item.UnitPrice}</td>
+                            <td>${item.Qty}</td>
+                            <td>${item.TotalPrice}</td>
+                            <td><button onclick=deleteProduct('${item._id}')>Delete</button></td>
+                            <td><button onclick= goToUpdate('${item._id}')>Edit</button></td> 
+                        </tr>
+                    `)
+                }); 
+            }
+            getproduct()
+
+            //Delete Product
+            async function deleteProduct(id){
+                let url = `https://crud.teamrabbil.com/api/v1/DeleteProduct/${id}`
+                let response = await axios.get(url);
+                document.getElementById('tableBody').innerHTML=""
+                getproduct();
+            }
+
+            //Update Product
+            function goToUpdate(id){
+                window.location= `update.html?id=${id}`;
+            }
+            
+        </script>
+    </body>
+</html>

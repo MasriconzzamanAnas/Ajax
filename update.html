@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
+        <title>Update product</title>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Add New Product</h1>
+            <div class="row">
+                <div class="column">
+                    <label>Product Name</label>
+                    <input id="ProductName" type="text">
+                    <label>Product Code</label>
+                    <input id="ProductCode" type="text">
+                    <label>Product IMG</label>
+                    <input id="ProductImg" type="url">
+                    <label>Unit Price</label>
+                    <input id="UnitPrice" type="text">
+                    <label>Qty</label>
+                    <input id="Qty" type="text">
+                    <label>Total Price</label>
+                    <input id="TotalPrice" type="text">
+                    <button onclick="updateProduct()">Submit</button>
+                </div>
+            </div>
+        </div>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script>
+            async function showProductDetails(){
+                const urlPeram = new URLSearchParams(window.location.search);
+                const ID = urlPeram.get("id");
+
+                let url = `https://crud.teamrabbil.com/api/v1/ReadProductByID/${ID}`;
+                let response = await axios.get(url);
+                let product = response.data.data[0];
+
+                console.log(product);
+                document.getElementById("ProductName").value = product.ProductName;
+                document.getElementById("ProductCode").value = product.ProductCode;
+                document.getElementById("ProductImg").value = product.Img;
+                document.getElementById("UnitPrice").value = product.UnitPrice;
+                document.getElementById("Qty").value = product.Qty;
+                document.getElementById("TotalPrice").value = product.TotalPrice;
+            }
+            
+            showProductDetails();
+
+            async function updateProduct(){
+                let urlid = new URLSearchParams(window.location.search);
+                let ID = urlid.get('id');
+
+                const ProductName = document.getElementById("ProductName").value;
+                const ProductCode = document.getElementById("ProductCode").value;
+                const ProductImg = document.getElementById("ProductImg").value;
+                const UnitPrice = document.getElementById("UnitPrice").value;
+                const Qty = document.getElementById("Qty").value;
+                const TotalPrice = document.getElementById("TotalPrice").value;
+
+                const obj= {
+                    "ProductName": ProductName,
+                    "ProductCode":ProductCode ,
+                    "Img": ProductImg,
+                    "UnitPrice": UnitPrice,
+                    "Qty": Qty,
+                    "TotalPrice": TotalPrice
+                }
+
+                let url = `https://crud.teamrabbil.com/api/v1/UpdateProduct/${ID}`;
+                let response = await axios.post(url, obj);
+                alert("Product Update successfully.");
+                window.location="index.html"
+            }
+        </script>
+    </body>
+</html>

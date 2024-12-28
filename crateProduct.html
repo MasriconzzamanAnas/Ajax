@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
+        <title>create product</title>
+    </head>
+    <body>
+        
+        <div class="container">
+            <h1>Add New Product</h1>
+            <div class="row">
+                <div class="column">
+                    <label>Product Name</label>
+                    <input id="ProductName" type="text">
+                    <label>Product Code</label>
+                    <input id="ProductCode" type="text">
+                    <label>Product IMG</label>
+                    <input id="ProductImg" type="url">
+                    <label>Unit Price</label>
+                    <input id="UnitPrice" type="text">
+                    <label>Qty</label>
+                    <input id="Qty" type="text">
+                    <label>Total Price</label>
+                    <input id="TotalPrice" type="text">
+                    <button onclick="addNewProduct()">Submit</button>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script>
+            async function addNewProduct(){
+                try{
+                    const ProductName = document.getElementById("ProductName").value;
+                    const ProductCode = document.getElementById("ProductCode").value;
+                    const ProductImg = document.getElementById("ProductImg").value;
+                    const UnitPrice = document.getElementById("UnitPrice").value;
+                    const Qty = document.getElementById("Qty").value;
+                    const TotalPrice = document.getElementById("TotalPrice").value;
+
+                    const obj = {
+                        "ProductName": ProductName,
+                        "ProductCode": ProductCode ,
+                        "Img": ProductImg,
+                        "UnitPrice": UnitPrice,
+                        "Qty": Qty,
+                        "TotalPrice": TotalPrice
+                    }
+
+                    let url = 'https://crud.teamrabbil.com/api/v1/CreateProduct';
+                    let response = await axios.post(url,obj);
+                    alert("Product added successfully.");
+                    window.location = 'index.html';
+                }catch (error) {
+                    console.error('Error caching:', error);
+                };
+            }
+        </script>
+    </body>
+</html>
