@@ -23,3 +23,15 @@ document.getElementById('postModal')?.addEventListener('click', function (e) {
         closeModal();
     }
 });
+
+
+
+fetch(
+    "https://basic-blog.teamrabbil.com/api/post-categories"
+).then(response=>response.json())
+.then(data =>{
+    const catbutton= document.getElementById("catbutton");
+    data.forEach(el => {
+        catbutton.innerHTML +=(`<button class="px-4 py-2 rounded-xl bg-purple-600 text-white shadow-lg shadow-purple-200 transition-all text-sm sm:text-base whitespace-nowrap">${el.name}</button>`)
+    });
+})
