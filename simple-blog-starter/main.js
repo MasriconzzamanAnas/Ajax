@@ -5,6 +5,17 @@ function openModal(postId) {
         document.body.classList.add('modal-open');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
+
+        fetch(`https://basic-blog.teamrabbil.com/api/post-details/${postId}`)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            // Update modal content
+            document.getElementById('postimg').setAttribute("src", data.postDetails.img);
+            document.getElementById('postcontent').textContent = data.postDetails.content;
+        });
+
+        
     }
 }
 
@@ -64,7 +75,7 @@ fetch(
                     </p>
                     <div class="flex items-center justify-between">
                         <span class="text-sm text-gray-500">Dec 15, 2024</span>
-                        <button onclick="openModal('post-1')"
+                        <button onclick="openModal(${el.id})"
                             class="text-purple-600 hover:text-purple-700 font-medium inline-flex items-center gap-transition-colors">
                             Read more →
                         </button>
@@ -106,7 +117,7 @@ const calltheid = (id=>{
                         </p>
                         <div class="flex items-center justify-between">
                             <span class="text-sm text-gray-500">Dec 15, 2024</span>
-                            <button onclick="openModal('post-1')"
+                            <button onclick="openModal({el.id})"
                                 class="text-purple-600 hover:text-purple-700 font-medium inline-flex items-center gap-transition-colors">
                                 Read more →
                             </button>
