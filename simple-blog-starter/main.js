@@ -13,24 +13,25 @@ function openModal(postId) {
             // Update modal content
             document.getElementById('postimg').setAttribute("src", data.postDetails.img);
             document.getElementById('postcontent').textContent = data.postDetails.content;
-
+            // document.getElementById('submit').addEventListener('click', function () {
+            //     postcomment(data.postDetails.list_id);
+            // });
             const commentbox = document.getElementById('commentbox');
             commentbox.innerHTML = ''; // Clear existing comments
             data.postComments.forEach(el =>{
                 commentbox.innerHTML += (`
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                            <div class="flex items-center gap-3 mb-3">
-                                <div
-                                    class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold">
-                                    ${el.author[0]}
-                                </div>
-                                <div>
-                                    <div class="font-semibold text-gray-800">${el.author}</div>
-                                    <div class="text-sm text-gray-500">December 15, 2024</div>
-                                </div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold">
+                                ${el.author[0]}
                             </div>
-                            <p class="text-gray-600 leading-relaxed">${el.comment}</p>
+                            <div>
+                                <div class="font-semibold text-gray-800">${el.author}</div>
+                                <div class="text-sm text-gray-500">December 15, 2024</div>
+                            </div>
                         </div>
+                        <p class="text-gray-600 leading-relaxed">${el.comment}</p>
+                    </div>
                 `);
             })
         });
@@ -150,5 +151,77 @@ const calltheid = (id=>{
 })
 
 
+
+// post comment
+function postcomment(id) {
+    //e.preventDefault();  Prevent default form submission behavior
+
+    const postId = id;
+    const author = document.getElementById('authorName').value.trim();
+    const comment = document.getElementById('commentText').value.trim();
+
+    if (comment === '') {
+        alert('Please enter a comment');
+        return;
+    }
+
+    fetch(`https://basic-blog.teamrabbil.com/api/create-comment`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            list_id: postId,
+            author: author,
+            comment: comment,
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })    
+        .then(data => {
+            alert('Comment posted successfully');
+            // Clear the input fields
+            document.getElementById('authorName').value = '';
+            document.getElementById('commentText').value = '';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to post comment. Please try again.');
+        });
+}
+
+
+
+// document.getElementById('commentForm').addEventListener('submit', function(e){
+//     e.preventDefault();
+//     const comment = document.getElementById('commentInput').value;
+//     const postId = document.getElementById('postId').value;
+
+//     if(comment.trim() === ''){
+//         alert('Please enter a comment');
+//         return;
+//     }
+
+//     fetch('https://basic-blog.teamrabbil.com/api/create-comment', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({
+//             postId: postId,
+//             comment: comment
+//         })
+//     })
+//    .then(response => response.json())
+//    .then(data => {
+//         console.log(data);
+//         alert('Comment posted successfully');
+//         location.reload(); // Reload the page to see the new comment
+//     });
+// });
 
 
