@@ -13,6 +13,26 @@ function openModal(postId) {
             // Update modal content
             document.getElementById('postimg').setAttribute("src", data.postDetails.img);
             document.getElementById('postcontent').textContent = data.postDetails.content;
+
+            const commentbox = document.getElementById('commentbox');
+            commentbox.innerHTML = ''; // Clear existing comments
+            data.postComments.forEach(el =>{
+                commentbox.innerHTML += (`
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold">
+                                    ${el.author[0]}
+                                </div>
+                                <div>
+                                    <div class="font-semibold text-gray-800">${el.author}</div>
+                                    <div class="text-sm text-gray-500">December 15, 2024</div>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 leading-relaxed">${el.comment}</p>
+                        </div>
+                `);
+            })
         });
 
         
@@ -117,7 +137,7 @@ const calltheid = (id=>{
                         </p>
                         <div class="flex items-center justify-between">
                             <span class="text-sm text-gray-500">Dec 15, 2024</span>
-                            <button onclick="openModal({el.id})"
+                            <button onclick="openModal(${el.id})"
                                 class="text-purple-600 hover:text-purple-700 font-medium inline-flex items-center gap-transition-colors">
                                 Read more →
                             </button>
