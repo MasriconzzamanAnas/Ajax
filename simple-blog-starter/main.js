@@ -1,4 +1,5 @@
 // Modal functions
+let post_id = null;
 function openModal(postId) {
     const modal = document.getElementById('postModal');
     if (modal) {
@@ -33,12 +34,15 @@ function openModal(postId) {
                         <p class="text-gray-600 leading-relaxed">${el.comment}</p>
                     </div>
                 `);
+                post_id=el.list_id;
+                console.log(post_id,el.list_id);
             })
         });
 
         
     }
 }
+
 
 function closeModal() {
     const modal = document.getElementById('postModal');
@@ -153,10 +157,9 @@ const calltheid = (id=>{
 
 
 // post comment
-function postcomment(id) {
-    //e.preventDefault();  Prevent default form submission behavior
+function postcomment(e) {
+    e.preventDefault(); // Prevent default form submission behavior
 
-    const postId = id;
     const author = document.getElementById('authorName').value.trim();
     const comment = document.getElementById('commentText').value.trim();
 
@@ -164,14 +167,15 @@ function postcomment(id) {
         alert('Please enter a comment');
         return;
     }
-
+    console.log(post_id);
     fetch(`https://basic-blog.teamrabbil.com/api/create-comment`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
+        
         body: JSON.stringify({
-            list_id: postId,
+            list_id: post_id,
             author: author,
             comment: comment,
         })
@@ -182,46 +186,79 @@ function postcomment(id) {
         }
         return response.json();
     })    
-        .then(data => {
+    .then(data => {
             alert('Comment posted successfully');
             // Clear the input fields
             document.getElementById('authorName').value = '';
             document.getElementById('commentText').value = '';
-        })
+        })    
         .catch(error => {
             console.error('Error:', error);
             alert('Failed to post comment. Please try again.');
         });
 }
 
+// Attach event listener to the form
+// document.getElementById('commentForm').addEventListener('submit', function (e) {
+//     e.preventDefault(); // Prevent form from reloading the page
 
+//     // Fetch necessary data
+//     const postId = document.getElementById('postModal').getAttribute('data-post-id'); // Ensure the post ID is set as an attribute on the modal
+//     const author = document.getElementById('authorName').value.trim();
+//     const comment = document.getElementById('commentText').value.trim();
 
-// document.getElementById('commentForm').addEventListener('submit', function(e){
-//     e.preventDefault();
-//     const comment = document.getElementById('commentInput').value;
-//     const postId = document.getElementById('postId').value;
-
-//     if(comment.trim() === ''){
+//     if (comment === '') {
 //         alert('Please enter a comment');
 //         return;
 //     }
 
+//     // Make the POST request
 //     fetch('https://basic-blog.teamrabbil.com/api/create-comment', {
 //         method: 'POST',
 //         headers: {
-//             'Content-Type': 'application/json'
+//             'Content-Type': 'application/json',
 //         },
 //         body: JSON.stringify({
-//             postId: postId,
-//             comment: comment
-//         })
+//             list_id: postId,
+//             author: author,
+//             comment: comment,
+//         }),
 //     })
-//    .then(response => response.json())
-//    .then(data => {
-//         console.log(data);
-//         alert('Comment posted successfully');
-//         location.reload(); // Reload the page to see the new comment
-//     });
+//         .then((response) => {
+//             if (!response.ok) {
+//                 throw new Error(`HTTP error! Status: ${response.status}`);
+//             }
+//             return response.json();
+//         })
+//         .then((data) => {
+//             alert(data);
+//             document.getElementById('authorName').value = '';
+//             document.getElementById('commentText').value = '';
+
+//             // Optionally, update the comments section with the new comment
+//             const commentbox = document.getElementById('commentbox');
+//             commentbox.innerHTML += `
+//                 <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+//                     <div class="flex items-center gap-3 mb-3">
+//                         <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold">
+//                             ${author[0]}
+//                         </div>
+//                         <div>
+//                             <div class="font-semibold text-gray-800">${author}</div>
+//                             <div class="text-sm text-gray-500">${new Date().toLocaleDateString()}</div>
+//                         </div>
+//                     </div>
+//                     <p class="text-gray-600 leading-relaxed">${comment}</p>
+//                 </div>`;
+//         })
+//         .catch((error) => {
+//             console.error('Error:', error);
+//             alert('Failed to post comment. Please try again.');
+//         });
 // });
+
+
+
+
 
 
